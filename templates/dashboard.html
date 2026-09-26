@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">🔎 Lost & Found</div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/lost-items">Lost Items</a>
+        <a href="/found-items">Found Items</a>
+        <a href="/matches">Matches</a>
+        <a href="/notifications">🔔</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<section class="section">
+
+    <div class="section-title">
+        <span class="badge">📊 Your Recovery Center</span>
+
+        <h2>Welcome back, <strong>{{ session["user_name"] }}</strong> 👋</h2>
+
+        <p>
+            Track your reports, discover matches and stay updated.
+        </p>
+    </div>
+
+    <div class="dashboard-stats">
+
+        <div class="stat-card">
+            <h3>🔴 Lost Items</h3>
+            <strong>{{ lost_count }}</strong>
+            <p>Currently reported</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>🟢 Found Items</h3>
+            <strong>{{ found_count }}</strong>
+            <p>Currently reported</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>🤖 Active Matches</h3>
+            <strong>{{ match_count }}</strong>
+            <p>Possible connections</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>🔔 Notifications</h3>
+            <strong>{{ notification_count }}</strong>
+            <p>Waiting to be viewed</p>
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section">
+
+    <div class="section-title">
+        <h2>✨ What would you like to do?</h2>
+        <p>Manage your lost & found activity from one place.</p>
+    </div>
+
+    <div class="action-grid">
+
+        <a href="/report-lost" class="action-card pink">
+            <div class="action-icon">🔴</div>
+            <h3>Report Lost Item</h3>
+            <p>Tell us about something you have lost.</p>
+        </a>
+
+        <a href="/report-found" class="action-card green">
+            <div class="action-icon">🟢</div>
+            <h3>Report Found Item</h3>
+            <p>Help someone recover an item you found.</p>
+        </a>
+
+        <a href="/my-reports" class="action-card purple">
+            <div class="action-icon">📋</div>
+            <h3>My Reports</h3>
+            <p>View and manage your submitted reports.</p>
+        </a>
+
+        <a href="/matches" class="action-card blue">
+            <div class="action-icon">🤖</div>
+            <h3>Possible Matches</h3>
+            <p>See items that AI thinks could be connected.</p>
+        </a>
+
+        <a href="/notifications" class="action-card orange">
+            <div class="action-icon">🔔</div>
+            <h3>Notifications</h3>
+            <p>Check updates about your reports and matches.</p>
+        </a>
+
+        <a href="/recompute-matches" class="action-card purple">
+            <div class="action-icon">✨</div>
+            <h3>Refresh AI Matches</h3>
+            <p>Run the matching system again for updated results.</p>
+        </a>
+
+    </div>
+
+</section>
+
+<section class="ai-section">
+
+    <h2>🧠 Smart Matching</h2>
+
+    <p>
+        Your reports are analyzed using item names, descriptions,
+        images, categories, dates and location information to discover
+        possible connections.
+    </p>
+
+    <div class="ai-pills">
+        <span class="ai-pill">🤖 AI Text Analysis</span>
+        <span class="ai-pill">🖼️ Image Similarity</span>
+        <span class="ai-pill">📍 GPS Distance</span>
+        <span class="ai-pill">📅 Date Matching</span>
+        <span class="ai-pill">🏷️ Category Matching</span>
+    </div>
+
+</section>
+
+<footer>
+    <p>Lost & Found — Smart Item Recovery System</p>
+</footer>
+
+</body>
+</html>

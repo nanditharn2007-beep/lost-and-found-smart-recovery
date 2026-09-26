@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Items | Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">🔎 Lost & Found</div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/found-items">Found Items</a>
+        <a href="/matches">Matches</a>
+        <a href="/notifications">🔔</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<section class="search-hero">
+
+    <div class="search-hero-content">
+
+        <span class="badge">🔍 Search Lost Items</span>
+
+        <h1>Looking for something <span>lost?</span></h1>
+
+        <p>
+            Search through reported lost items and see if you can help
+            reconnect them with their owners.
+        </p>
+
+        <form method="GET" class="main-search-form">
+
+            <div class="search-input">
+                🔎
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search item or description..."
+                    value="{{ search }}"
+                >
+            </div>
+
+            <div class="filter-row">
+
+                <select name="category">
+                    <option value="">🏷️ All Categories</option>
+
+                    <option value="Electronics"
+                        {% if category == "Electronics" %}selected{% endif %}>
+                        Electronics
+                    </option>
+
+                    <option value="Documents"
+                        {% if category == "Documents" %}selected{% endif %}>
+                        Documents
+                    </option>
+
+                    <option value="Accessories"
+                        {% if category == "Accessories" %}selected{% endif %}>
+                        Accessories
+                    </option>
+
+                    <option value="Clothing"
+                        {% if category == "Clothing" %}selected{% endif %}>
+                        Clothing
+                    </option>
+
+                    <option value="Books"
+                        {% if category == "Books" %}selected{% endif %}>
+                        Books
+                    </option>
+
+                    <option value="Other"
+                        {% if category == "Other" %}selected{% endif %}>
+                        Other
+                    </option>
+                </select>
+
+                <input
+                    type="text"
+                    name="location"
+                    placeholder="📍 Location"
+                    value="{{ location }}"
+                >
+
+                <button type="submit" class="btn btn-primary">
+                    Search
+                </button>
+
+                <a href="/lost-items" class="btn btn-secondary">
+                    Clear
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        <section class="section search-messages">
+
+            {% for category, message in messages %}
+
+                <div class="notification-card">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        </section>
+
+    {% endif %}
+
+{% endwith %}
+
+<section class="section">
+
+    <div class="section-title">
+
+        <span class="badge">🔴 Lost Items</span>
+
+        <h2>Items Reported Lost</h2>
+
+        <p>
+            Browse reports and look for something you may have found.
+        </p>
+
+    </div>
+
+    {% if items %}
+
+    <div class="item-grid">
+
+        {% for item in items %}
+
+        <div class="item-card lost-item-card">
+
+            {% if item[5] %}
+
+                <img
+                    src="{{ url_for('uploaded_file', filename=item[5]) }}"
+                    alt="{{ item[1] }}"
+                >
+
+            {% else %}
+
+                <div class="report-placeholder">
+                    🔎
+                </div>
+
+            {% endif %}
+
+            <div class="report-top">
+
+                <span class="report-type lost-type">
+                    🔴 LOST
+                </span>
+
+                <span class="category-badge">
+                    🏷️ {{ item[8] if item[8] else "Other" }}
+                </span>
+
+            </div>
+
+            <h3>{{ item[1] }}</h3>
+
+            <p>
+                <strong>📝 Description</strong><br>
+                {{ item[2] }}
+            </p>
+
+            <p>
+                <strong>📍 Location</strong><br>
+                {{ item[3] }}
+            </p>
+
+            <p>
+                <strong>📅 Date</strong><br>
+                {{ item[4] }}
+            </p>
+
+            <a href="/matches" class="match-button">
+                🤖 Find Possible Matches
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-reports">
+
+        <div class="empty-icon">
+            🔎
+        </div>
+
+        <h2>No Lost Items Found</h2>
+
+        <p>
+            We couldn't find any items matching your search.
+            Try changing your search or filters.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="/lost-items" class="btn btn-secondary">
+                Clear Search
+            </a>
+
+            <a href="/report-lost" class="btn btn-primary">
+                🔴 Report Lost Item
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+<footer>
+    <p>Lost & Found — Smart Item Recovery System</p>
+</footer>
+
+</body>
+</html>

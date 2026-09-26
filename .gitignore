@@ -1,0 +1,7 @@
+lost_found.db
+uploads/
+__pycache__/
+*.pyc
+.env
+venv/
+.venv/

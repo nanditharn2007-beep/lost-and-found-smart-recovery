@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="auth-page">
+
+    <div class="auth-card">
+
+        <a href="/" class="auth-home">
+            ← Back to Home
+        </a>
+
+        <div class="auth-icon">
+            ✨
+        </div>
+
+        <h1>Create <span>Account</span></h1>
+
+        <p class="auth-subtitle">
+            Create an account to report items,
+            discover matches and track your recovery.
+        </p>
+
+        <form method="POST">
+
+            <div class="auth-form-group">
+
+                <label>Name</label>
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Enter your name"
+                    required
+                >
+
+            </div>
+
+            <div class="auth-form-group">
+
+                <label>Email</label>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+            </div>
+
+            <div class="auth-form-group">
+
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Create a password"
+                    minlength="6"
+                    required
+                >
+
+                <small class="password-hint">
+                    Password must contain at least 6 characters.
+                </small>
+
+            </div>
+
+            <button type="submit" class="auth-submit">
+                Create Account →
+            </button>
+
+        </form>
+
+        <div class="auth-divider">
+            <span>OR</span>
+        </div>
+
+        <div class="auth-bottom">
+
+            <p>
+                Already have an account?
+            </p>
+
+            <a href="/login" class="auth-register">
+                Login
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

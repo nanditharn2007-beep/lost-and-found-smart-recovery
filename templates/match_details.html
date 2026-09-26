@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Details | Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🔎 Lost & Found
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/lost-items">Lost Items</a>
+        <a href="/found-items">Found Items</a>
+        <a href="/matches">Matches</a>
+        <a href="/notifications">🔔</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+</nav>
+
+<section class="match-detail-hero">
+
+    <div class="match-detail-hero-content">
+
+        <span class="badge">🤖 AI Match Analysis</span>
+
+        <h1>Possible <span>Match</span></h1>
+
+        <p>
+            Review the AI analysis and item details before confirming
+            whether these reports belong together.
+        </p>
+
+        <div class="detail-score">
+
+            <span>Overall Match Score</span>
+
+            <strong>{{ match[1] }}%</strong>
+
+            <small>
+                AI-powered similarity analysis
+            </small>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section">
+
+    <div class="detail-ai-card">
+
+        <div class="detail-section-heading">
+            <span>🧠</span>
+
+            <div>
+                <h2>AI Analysis</h2>
+                <p>How the system compared these two reports.</p>
+            </div>
+        </div>
+
+        <div class="detail-similarity-grid">
+
+            <div class="detail-similarity-card">
+                <div class="detail-similarity-icon">📝</div>
+                <strong>{{ "%.1f"|format(name_similarity) }}%</strong>
+                <span>Name Similarity</span>
+            </div>
+
+            <div class="detail-similarity-card">
+                <div class="detail-similarity-icon">📄</div>
+                <strong>{{ "%.1f"|format(description_similarity) }}%</strong>
+                <span>Description Similarity</span>
+            </div>
+
+            <div class="detail-similarity-card">
+                <div class="detail-similarity-icon">🖼️</div>
+                <strong>{{ "%.1f"|format(image_similarity) }}%</strong>
+                <span>Image Similarity</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section">
+
+    <div class="section-title">
+
+        <span class="badge">🔍 Detailed Comparison</span>
+
+        <h2>Lost vs Found</h2>
+
+        <p>
+            Compare the information reported for both items.
+        </p>
+
+    </div>
+
+    <div class="detail-comparison">
+
+        <div class="detail-item-card lost-detail">
+
+            <div class="detail-item-header">
+
+                <span class="report-type lost-type">
+                    🔴 LOST ITEM
+                </span>
+
+            </div>
+
+            {% if match[11] %}
+
+            <img
+                src="{{ url_for('uploaded_file', filename=match[11]) }}"
+                alt="Lost item image"
+                class="detail-item-image"
+            >
+
+            {% else %}
+
+            <div class="detail-item-placeholder">
+                🔎
+            </div>
+
+            {% endif %}
+
+            <h2>{{ match[7] }}</h2>
+
+            <div class="detail-info">
+
+                <div>
+                    <span>🏷️ Category</span>
+                    <strong>{{ match[14] if match[14] else "Not specified" }}</strong>
+                </div>
+
+                <div>
+                    <span>📍 Location</span>
+                    <strong>{{ match[9] }}</strong>
+                </div>
+
+                <div>
+                    <span>📅 Date</span>
+                    <strong>{{ match[10] }}</strong>
+                </div>
+
+            </div>
+
+            <div class="detail-description">
+
+                <span>📝 Description</span>
+
+                <p>{{ match[8] }}</p>
+
+            </div>
+
+        </div>
+
+        <div class="comparison-middle">
+
+            <div class="comparison-icon">
+                ⇄
+            </div>
+
+            <span>AI<br>Comparison</span>
+
+        </div>
+
+        <div class="detail-item-card found-detail">
+
+            <div class="detail-item-header">
+
+                <span class="report-type found-type">
+                    🟢 FOUND ITEM
+                </span>
+
+            </div>
+
+            {% if match[21] %}
+
+            <img
+                src="{{ url_for('uploaded_file', filename=match[21]) }}"
+                alt="Found item image"
+                class="detail-item-image"
+            >
+
+            {% else %}
+
+            <div class="detail-item-placeholder">
+                🎒
+            </div>
+
+            {% endif %}
+
+            <h2>{{ match[17] }}</h2>
+
+            <div class="detail-info">
+
+                <div>
+                    <span>🏷️ Category</span>
+                    <strong>{{ match[24] if match[24] else "Not specified" }}</strong>
+                </div>
+
+                <div>
+                    <span>📍 Location</span>
+                    <strong>{{ match[19] }}</strong>
+                </div>
+
+                <div>
+                    <span>📅 Date</span>
+                    <strong>{{ match[20] }}</strong>
+                </div>
+
+            </div>
+
+            <div class="detail-description">
+
+                <span>📝 Description</span>
+
+                <p>{{ match[18] }}</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% if distance is not none %}
+
+<section class="section">
+
+    <div class="location-card">
+
+        <div class="location-icon">
+            📍
+        </div>
+
+        <div>
+
+            <span class="location-label">
+                LOCATION COMPARISON
+            </span>
+
+            <h2>{{ "%.2f"|format(distance) }} km apart</h2>
+
+            <p>
+                The reported GPS locations of these items are
+                approximately this distance apart.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+<section class="section">
+
+    <div class="reason-card">
+
+        <div class="detail-section-heading">
+
+            <span>💡</span>
+
+            <div>
+                <h2>Why This May Be a Match</h2>
+                <p>Factors identified by the matching system.</p>
+            </div>
+
+        </div>
+
+        {% if reasons %}
+
+        <div class="detail-reason-list">
+
+            {% for reason in reasons %}
+
+            <div class="detail-reason">
+                <span>✓</span>
+                <p>{{ reason }}</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <p>No matching reasons available.</p>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+<section class="section">
+
+    <div class="confirmation-card">
+
+        <div class="confirmation-header">
+
+            <span class="badge">🤝 Confirmation</span>
+
+            <h2>Confirm This Match</h2>
+
+            <p>
+                Both the lost-item reporter and found-item reporter
+                must confirm before the match is resolved.
+            </p>
+
+        </div>
+
+        <div class="confirmation-status">
+
+            <div class="person-status">
+
+                <span>🔴 Lost User</span>
+
+                {% if match[4] == 1 %}
+
+                <strong class="confirmed">
+                    ✓ Confirmed
+                </strong>
+
+                {% else %}
+
+                <strong class="waiting">
+                    ⏳ Waiting
+                </strong>
+
+                {% endif %}
+
+            </div>
+
+            <div class="person-status">
+
+                <span>🟢 Found User</span>
+
+                {% if match[5] == 1 %}
+
+                <strong class="confirmed">
+                    ✓ Confirmed
+                </strong>
+
+                {% else %}
+
+                <strong class="waiting">
+                    ⏳ Waiting
+                </strong>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% if match[3] == "ACTIVE" %}
+
+        <form method="POST" class="confirm-form">
+
+            <button type="submit" class="confirm-button">
+                🤝 Confirm Match
+            </button>
+
+        </form>
+
+        <p class="confirmation-note">
+            Only confirm if the found item appears to be the item that was lost.
+        </p>
+
+        {% else %}
+
+        <div class="resolved-box">
+
+            <div class="resolved-icon">
+                ✓
+            </div>
+
+            <h2>Match Resolved</h2>
+
+            <p>
+                Both users have confirmed this match.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+        <div class="status-line">
+
+            <span>Current Status</span>
+
+            <strong>{{ match[3] }}</strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+<div class="back-navigation">
+
+    <a href="/matches">
+        ← Back to Possible Matches
+    </a>
+
+</div>
+
+<footer>
+    <p>Lost & Found — Smart Item Recovery System</p>
+</footer>
+
+</body>
+</html>

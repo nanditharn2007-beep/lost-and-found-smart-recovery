@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications | Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🔎 Lost & Found
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/lost-items">Lost Items</a>
+        <a href="/found-items">Found Items</a>
+        <a href="/matches">Matches</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+</nav>
+
+<section class="notification-hero">
+
+    <div class="notification-hero-content">
+
+        <span class="badge">🔔 Stay Updated</span>
+
+        <h1>Your <span>Notifications</span></h1>
+
+        <p>
+            Stay informed about possible matches, confirmations
+            and updates related to your reports.
+        </p>
+
+    </div>
+
+</section>
+
+<section class="section">
+
+    <div class="section-title">
+
+        <span class="badge">📬 Activity Updates</span>
+
+        <h2>Recent Notifications</h2>
+
+        <p>
+            Important updates about your lost and found activity.
+        </p>
+
+    </div>
+
+    {% if notifications %}
+
+    <div class="notifications-list">
+
+        {% for notification in notifications %}
+
+        <div class="notification-card-ui {% if notification[3] == 0 %}notification-unread{% endif %}">
+
+            <div class="notification-icon">
+
+                {% if "resolved" in notification[2]|lower or "confirmed" in notification[2]|lower %}
+                    ✅
+                {% elif "match" in notification[2]|lower %}
+                    🤖
+                {% else %}
+                    🔔
+                {% endif %}
+
+            </div>
+
+            <div class="notification-content">
+
+                <div class="notification-top">
+
+                    {% if notification[3] == 0 %}
+
+                    <span class="notification-status unread-status">
+                        NEW
+                    </span>
+
+                    {% else %}
+
+                    <span class="notification-status read-status">
+                        READ
+                    </span>
+
+                    {% endif %}
+
+                    <span class="notification-date">
+                        {{ notification[4] }}
+                    </span>
+
+                </div>
+
+                <h3>
+                    {% if "resolved" in notification[2]|lower %}
+                        Match Resolved
+                    {% elif "match" in notification[2]|lower %}
+                        Possible Match Found
+                    {% else %}
+                        Notification
+                    {% endif %}
+                </h3>
+
+                <p>
+                    {{ notification[2] }}
+                </p>
+
+                {% if notification[1] %}
+
+                <a
+                    href="/match/{{ notification[1] }}"
+                    class="notification-button"
+                >
+                    View Match Details →
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-reports">
+
+        <div class="empty-icon">
+            🔔
+        </div>
+
+        <h2>No Notifications Yet</h2>
+
+        <p>
+            You will receive notifications when the system
+            discovers possible matches or updates your reports.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="/matches" class="btn btn-primary">
+                🤖 View Matches
+            </a>
+
+            <a href="/dashboard" class="btn btn-secondary">
+                📊 Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+<footer>
+    <p>Lost & Found — Smart Item Recovery System</p>
+</footer>
+
+</body>
+</html>

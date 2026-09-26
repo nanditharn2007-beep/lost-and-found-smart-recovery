@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Reports | Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">🔎 Lost & Found</div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/lost-items">Lost Items</a>
+        <a href="/found-items">Found Items</a>
+        <a href="/matches">Matches</a>
+        <a href="/notifications">🔔</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<section class="section">
+
+    <div class="section-title">
+        <span class="badge">📋 Your Reports</span>
+
+        <h2>My Lost & Found Items</h2>
+
+        <p>
+            View, track and manage everything you have reported.
+        </p>
+    </div>
+
+    {% if reports %}
+
+    <div class="item-grid">
+
+        {% for report in reports %}
+
+        <div class="item-card">
+
+            {% if report[5] %}
+                <img
+                    src="{{ url_for('uploaded_file', filename=report[5]) }}"
+                    alt="{{ report[1] }}"
+                >
+            {% else %}
+                <div class="report-placeholder">
+                    🔎
+                </div>
+            {% endif %}
+
+            <div class="report-top">
+
+                {% if report[8]|lower == "lost" %}
+                    <span class="report-type lost-type">🔴 LOST</span>
+                {% else %}
+                    <span class="report-type found-type">🟢 FOUND</span>
+                {% endif %}
+
+                <span class="status-badge {{ report[7]|lower }}">
+                    {{ report[7] }}
+                </span>
+
+            </div>
+
+            <h3>{{ report[1] }}</h3>
+
+            <p>
+                <strong>📝 Description</strong><br>
+                {{ report[2] }}
+            </p>
+
+            <p>
+                <strong>📍 Location</strong><br>
+                {{ report[3] }}
+            </p>
+
+            <p>
+                <strong>📅 Date</strong><br>
+                {{ report[4] }}
+            </p>
+
+            <p>
+                <strong>🏷️ Category</strong><br>
+                {{ report[6] or "Not specified" }}
+            </p>
+
+            {% if report[7] == "ACTIVE" %}
+
+            <form
+                method="POST"
+                action="/item/{{ report[8]|lower }}/{{ report[0] }}/delete"
+                onsubmit="return confirm('Are you sure you want to delete this report?');"
+            >
+                <button type="submit" class="delete-report-btn">
+                    🗑️ Delete Report
+                </button>
+            </form>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-reports">
+
+        <div class="empty-icon">🔎</div>
+
+        <h2>No Reports Yet</h2>
+
+        <p>
+            You haven't reported any lost or found items yet.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="/report-lost" class="btn btn-primary">
+                🔴 Report Lost Item
+            </a>
+
+            <a href="/report-found" class="btn btn-secondary">
+                🟢 Report Found Item
+            </a>
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+<footer>
+    <p>Lost & Found — Smart Item Recovery System</p>
+</footer>
+
+</body>
+</html>

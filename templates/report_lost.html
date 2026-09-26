@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Lost Item | Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🔎 Lost & Found
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/lost-items">Lost Items</a>
+        <a href="/found-items">Found Items</a>
+        <a href="/matches">Matches</a>
+        <a href="/notifications">🔔</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+</nav>
+
+<section class="form-hero">
+
+    <div class="form-hero-content">
+
+        <span class="badge">🔴 Lost Item Report</span>
+
+        <h1>Tell us what you <span>lost.</span></h1>
+
+        <p>
+            Provide as much information as possible so our AI can
+            identify potential matches.
+        </p>
+
+    </div>
+
+</section>
+
+<section class="form-section">
+
+    <div class="modern-form-container">
+
+        <div class="form-header">
+
+            <div class="form-header-icon">
+                🔎
+            </div>
+
+            <div>
+                <h2>Lost Item Details</h2>
+                <p>
+                    Add the details below to create your report.
+                </p>
+            </div>
+
+        </div>
+
+        <form
+            action="/report-lost"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <div class="form-group">
+
+                <label for="item_name">
+                    Item Name
+                </label>
+
+                <input
+                    type="text"
+                    id="item_name"
+                    name="item_name"
+                    placeholder="Example: Black wallet"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="category">
+                    Category
+                </label>
+
+                <select
+                    id="category"
+                    name="category"
+                    required
+                >
+
+                    <option value="">
+                        Select a category
+                    </option>
+
+                    <option value="Electronics">
+                        Electronics
+                    </option>
+
+                    <option value="Documents">
+                        Documents
+                    </option>
+
+                    <option value="Accessories">
+                        Accessories
+                    </option>
+
+                    <option value="Clothing">
+                        Clothing
+                    </option>
+
+                    <option value="Books">
+                        Books
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="description">
+                    Description
+                </label>
+
+                <textarea
+                    id="description"
+                    name="description"
+                    placeholder="Describe the item, color, brand, unique features, stickers, marks, etc."
+                    required
+                ></textarea>
+
+                <small>
+                    💡 More details can help the AI matching system identify similarities.
+                </small>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="location">
+                    Where was it lost?
+                </label>
+
+                <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    placeholder="Example: SRM Ramapuram Library"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="date">
+                    Date it was lost
+                </label>
+
+                <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    required
+                >
+
+            </div>
+
+            <div class="gps-box">
+
+                <div class="gps-header">
+
+                    <div class="gps-icon">
+                        📍
+                    </div>
+
+                    <div>
+                        <h3>GPS Location</h3>
+                        <p>
+                            Add your current GPS coordinates to improve
+                            distance-based matching.
+                        </p>
+                    </div>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="location-button"
+                    onclick="getLocation()"
+                >
+                    📍 Use My Location
+                </button>
+
+                <input
+                    type="hidden"
+                    name="latitude"
+                    id="latitude"
+                >
+
+                <input
+                    type="hidden"
+                    name="longitude"
+                    id="longitude"
+                >
+
+                <p id="location-status" class="location-status">
+                    GPS location is optional.
+                </p>
+
+            </div>
+
+            <div class="upload-box">
+
+                <div class="upload-icon">
+                    🖼️
+                </div>
+
+                <div class="upload-content">
+
+                    <h3>Upload Item Image</h3>
+
+                    <p>
+                        A clear image can improve image-based matching.
+                    </p>
+
+                    <input
+                        type="file"
+                        name="image"
+                        id="image"
+                        accept=".jpg,.jpeg,.png,.webp,image/*"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+
+                <a href="/" class="cancel-button">
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="submit-report-button"
+                >
+                    🔴 Report Lost Item
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+<footer>
+    <p>Lost & Found — Smart Item Recovery System</p>
+</footer>
+
+<script>
+
+function getLocation() {
+
+    if (!navigator.geolocation) {
+
+        document.getElementById("location-status").innerText =
+            "Geolocation is not supported by your browser.";
+
+        return;
+    }
+
+    document.getElementById("location-status").innerText =
+        "📍 Getting your location...";
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+            document.getElementById("latitude").value =
+                position.coords.latitude;
+
+            document.getElementById("longitude").value =
+                position.coords.longitude;
+
+            document.getElementById("location-status").innerText =
+                "✅ Location captured successfully.";
+
+        },
+
+        function(error) {
+
+            document.getElementById("location-status").innerText =
+                "Unable to get your location. You can continue without GPS.";
+
+        }
+
+    );
+
+}
+
+</script>
+
+</body>
+</html>

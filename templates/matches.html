@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Possible Matches | Lost & Found</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🔎 Lost & Found
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/lost-items">Lost Items</a>
+        <a href="/found-items">Found Items</a>
+        <a href="/notifications">🔔</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+</nav>
+
+<section class="match-hero">
+
+    <div class="match-hero-content">
+
+        <span class="badge">🤖 AI-Powered Matching</span>
+
+        <h1>Possible <span>Matches</span></h1>
+
+        <p>
+            Our AI compares item names, descriptions, images,
+            categories, dates and locations to discover possible
+            connections.
+        </p>
+
+    </div>
+
+</section>
+
+{% if grouped_matches %}
+
+<section class="section">
+
+    {% for group in grouped_matches %}
+
+    <div class="lost-match-section">
+
+        <div class="section-title">
+
+            <span class="badge">🔴 Your Lost Item</span>
+
+            <h2>{{ group.lost[1] }}</h2>
+
+            <p>
+                Possible matches found for this report.
+            </p>
+
+        </div>
+
+        <div class="lost-item-summary">
+
+            <div class="summary-image">
+
+                {% if group.lost[5] %}
+
+                <img
+                    src="{{ url_for('uploaded_file', filename=group.lost[5]) }}"
+                    alt="{{ group.lost[1] }}"
+                >
+
+                {% else %}
+
+                <div class="summary-placeholder">
+                    🔎
+                </div>
+
+                {% endif %}
+
+            </div>
+
+            <div class="summary-info">
+
+                <div class="summary-badges">
+                    <span class="report-type lost-type">
+                        🔴 LOST
+                    </span>
+
+                    <span class="category-badge">
+                        🏷️ {{ group.lost[8] if group.lost[8] else "Other" }}
+                    </span>
+                </div>
+
+                <h3>{{ group.lost[1] }}</h3>
+
+                <p>
+                    <strong>📝 Description</strong><br>
+                    {{ group.lost[2] }}
+                </p>
+
+                <p>
+                    <strong>📍 Location</strong><br>
+                    {{ group.lost[3] }}
+                </p>
+
+                <p>
+                    <strong>📅 Date</strong><br>
+                    {{ group.lost[4] }}
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="match-divider">
+            <span>🤖 AI FOUND {{ group.matches|length }} POSSIBLE MATCH{% if group.matches|length != 1 %}ES{% endif %}</span>
+        </div>
+
+        {% for match in group.matches %}
+
+        <div class="match-card">
+
+            <div class="match-card-header">
+
+                <div>
+                    <span class="badge">✨ AI Match</span>
+                    <h2>Possible Found Item</h2>
+                </div>
+
+                <div class="match-score">
+                    <span>Match Score</span>
+                    <strong>{{ match[2] }}%</strong>
+                </div>
+
+            </div>
+
+            <div class="match-comparison">
+
+                <div class="match-side">
+
+                    {% if match[1][5] %}
+
+                    <img
+                        src="{{ url_for('uploaded_file', filename=match[1][5]) }}"
+                        alt="{{ match[1][1] }}"
+                        class="match-image"
+                    >
+
+                    {% else %}
+
+                    <div class="match-image-placeholder">
+                        🎒
+                    </div>
+
+                    {% endif %}
+
+                    <span class="report-type found-type">
+                        🟢 FOUND
+                    </span>
+
+                    <h3>{{ match[1][1] }}</h3>
+
+                </div>
+
+                <div class="match-arrow">
+                    ⇄
+                </div>
+
+                <div class="match-side">
+
+                    {% if group.lost[5] %}
+
+                    <img
+                        src="{{ url_for('uploaded_file', filename=group.lost[5]) }}"
+                        alt="{{ group.lost[1] }}"
+                        class="match-image"
+                    >
+
+                    {% else %}
+
+                    <div class="match-image-placeholder">
+                        🔎
+                    </div>
+
+                    {% endif %}
+
+                    <span class="report-type lost-type">
+                        🔴 LOST
+                    </span>
+
+                    <h3>{{ group.lost[1] }}</h3>
+
+                </div>
+
+            </div>
+
+            <div class="ai-analysis">
+
+                <div class="analysis-title">
+                    🧠 AI Analysis
+                </div>
+
+                <div class="similarity-grid">
+
+                    <div class="similarity-card">
+                        <span>📝</span>
+                        <strong>{{ match[6] }}%</strong>
+                        <p>Name Similarity</p>
+                    </div>
+
+                    <div class="similarity-card">
+                        <span>📄</span>
+                        <strong>{{ match[7] }}%</strong>
+                        <p>Description Similarity</p>
+                    </div>
+
+                    <div class="similarity-card">
+                        <span>🖼️</span>
+                        <strong>{{ match[8] }}%</strong>
+                        <p>Image Similarity</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="found-details">
+
+                <h3>🟢 Found Item Details</h3>
+
+                <div class="detail-grid">
+
+                    <div>
+                        <span>Name</span>
+                        <strong>{{ match[1][1] }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Category</span>
+                        <strong>{{ match[1][8] if match[1][8] else "Not specified" }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Location</span>
+                        <strong>{{ match[1][3] }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Date</span>
+                        <strong>{{ match[1][4] }}</strong>
+                    </div>
+
+                </div>
+
+                <div class="description-box">
+                    <span>Description</span>
+                    <p>{{ match[1][2] }}</p>
+                </div>
+
+            </div>
+
+            <div class="match-reasons">
+
+                <h3>💡 Why This May Be a Match</h3>
+
+                {% if match[4] %}
+
+                <div class="reason-list">
+
+                    {% for reason in match[4] %}
+
+                    <div class="reason-item">
+                        <span>✓</span>
+                        <p>{{ reason }}</p>
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                {% else %}
+
+                <p>No matching reasons available.</p>
+
+                {% endif %}
+
+            </div>
+
+            <a href="/match/{{ match[5] }}" class="full-match-button">
+                View Full Match Details →
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endfor %}
+
+</section>
+
+{% else %}
+
+<section class="section">
+
+    <div class="empty-reports">
+
+        <div class="empty-icon">
+            🤖
+        </div>
+
+        <h2>No Possible Matches Yet</h2>
+
+        <p>
+            The AI hasn't found any active matches for your reports.
+            New matches will appear when compatible lost and found
+            items are reported.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="/report-lost" class="btn btn-primary">
+                🔴 Report Lost Item
+            </a>
+
+            <a href="/report-found" class="btn btn-secondary">
+                🟢 Report Found Item
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+<footer>
+    <p>Lost & Found — Smart Item Recovery System</p>
+</footer>
+
+</body>
+</html>
